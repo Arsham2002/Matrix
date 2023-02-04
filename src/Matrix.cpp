@@ -62,7 +62,7 @@ bool Matrix::is_upper_triangular()const
     
     for(size_t i = 1; i < row; i++)
         for(size_t j = 0; j < i ; j++)
-            if(i != j && matris[i][j] != 0)
+            if(matris[i][j] != 0)
                 return false;
     
     return true;
@@ -78,6 +78,54 @@ bool Matrix::is_identity()const
             return false;
 
     return true;
+}
+bool Matrix::is_normal_symmetric()const
+{
+    if(!square)
+        return false;
+    
+    for(size_t i = 1; i < row; i++)
+        for(size_t j = 0; j < i; j++)
+            if(matris[i][j] != matris[j][i])
+                return false;
+
+    return true;
+}
+bool Matrix::is_skew_symmetric()const
+{
+    if(!square)
+        return false;
+    
+    for(size_t i = 1; i < row; i++)
+        for(size_t j = 0; j < i; j++)
+            if(matris[i][j] + matris[j][i] != 0)
+                return false;
+
+    return true;
+
+}
+void Matrix::change(int _row, int _col, int amount)
+{
+    if(_row < row && _col < col)
+        matris[_row][_col] = amount;
+    else
+        cout << "change: input coordinates are out of range\n";
+}
+Matrix* Matrix::inverse(string n)
+{
+    if(!square)
+        return nullptr;
+    if(n == "")
+    {
+        for(size_t i = 1; i< row; i++)
+            for(size_t j = 0 ; j < i; j++)
+            {
+                matris[i][j] += matris[j][i];
+                matris[j][i] = matris[i][j] - matris[j][i];
+                matris[i][j] -= matris[j][i];
+            }
+        return nullptr;
+    }
 }
 void Matrix::destructor()
 {
