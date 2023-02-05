@@ -3,8 +3,13 @@
 
 CMakeFiles/Matrix.dir/main.cpp.o
  ../include/Matrix.hpp
+ ../include/app.hpp
  ../include/functions.hpp
  /home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/main.cpp
 CMakeFiles/Matrix.dir/src/Matrix.cpp.o
  ../include/Matrix.hpp
  /home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/Matrix.cpp
+CMakeFiles/Matrix.dir/src/app.cpp.o
+ ../include/Matrix.hpp
+ ../include/app.hpp
+ /home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/app.cpp

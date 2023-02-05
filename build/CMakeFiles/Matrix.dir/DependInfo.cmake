@@ -6,6 +6,7 @@ set(CMAKE_DEPENDS_LANGUAGES
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/main.cpp" "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/Matrix.dir/main.cpp.o"
   "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/Matrix.cpp" "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/Matrix.dir/src/Matrix.cpp.o"
+  "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/app.cpp" "/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/Matrix.dir/src/app.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

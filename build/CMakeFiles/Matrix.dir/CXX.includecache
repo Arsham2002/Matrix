@@ -12,21 +12,13 @@ string
 vector
 -
 
-../include/functions.hpp
+../include/app.hpp
 Matrix.hpp
 ../include/Matrix.hpp
 
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/main.cpp
+/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/app.cpp
+app.hpp
+/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/src/app.hpp
 iostream
 -
-vector
--
-string
--
-algorithm
--
-Matrix.hpp
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/Matrix.hpp
-functions.hpp
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/functions.hpp
 

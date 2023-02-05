@@ -7,28 +7,33 @@ using namespace std;
 
 class Matrix
 {
-    friend Matrix* find_Matrix(vector<Matrix*> ,string, int&);
+    friend int find_Matrix(const vector<Matrix*>& ,string);
+    //Due to the need to access the names of the matrices in the vector
     private:
-    string name;
-    int** matris; 
-    int row;
-    int col;
-    bool square;
+        string name;//The name of the matrix
+        int** matris; //The values ​​in the two-dimensional matrix
+        int row;//Number of rows
+        int col;//Number of columns
+        bool square;//Is it a square matrix or not?
 
     public:
-    Matrix(string, int a, int = -1);
-    void fill_from_user();
-    void fill_auto(int);
-    void show()const;
-    void change(int, int, int);
-    void destructor();
-    bool is_diagonal()const;
-    bool is_lower_triangular()const;
-    bool is_upper_triangular()const;
-    bool is_identity()const;
-    bool is_normal_symmetric()const;
-    bool is_skew_symmetric()const;
-    Matrix* inverse(string);
+        Matrix(string, int, int = -1);//Description in the implementation section
+
+        void fill_from_user();//Matrix members are taken directly from the user
+        void fill_auto(int);//Description in the implementation section
+        void show()const;//Print members of matrix
+        void change(int, int, int);//Description in the implementation section
+
+        bool is_diagonal()const;//Is it the diagonal matrix?
+        bool is_lower_triangular()const;//Is it the lower triangular matrix?
+        bool is_upper_triangular()const;//Is it the upper triangular matrix?
+        bool is_identity()const;//Is it the identity matrix?
+        bool is_normal_symmetric()const;//Is it the normal symmetric matrix?
+        bool is_skew_symmetric()const;//Is it the skew symmetric matrix?
+
+        Matrix* inverse(string);//Description in the implementation section
+
+        void destructor();//Frees the spaces occupied by the object matrix(int** matris)
 
 };
 

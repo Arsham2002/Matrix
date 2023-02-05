@@ -4,6 +4,7 @@ project(Matrix)
 set(SOURCES
 	main
     src/Matrix
+    src/app
 )
 add_executable(${PROJECT_NAME} ${SOURCES})
 include_directories(include)
