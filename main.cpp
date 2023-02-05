@@ -9,13 +9,15 @@ int main()// line 253 and fix constructor
 {
     vector<Matrix*> user_matris;
     string command;
-    cout << "Exit: exit \nAdd: add matrix 'name' \nDiagonal: is_diagonal 'name' \n";
-    cout << "Upper/Lower trangular: is_upper/lower_trangular 'name' \nTrangular: i";
-    cout << "s_trangular 'name' \nIdentity: is_identity 'name' \nNormal/Skew symme";
-    cout << "tric: is_normal/skew_symmetric 'name' \nSymmetric: is_symmetric 'name";
-    cout << "' \n Inverse: inverse 'name' or inverse 'name' 'name of matrix 2' \nS";
-    cout << "how: show 'name' \nDelete: delete 'name' \nChange an element: change ";
-    cout << "'name' 'row' 'column' 'new element' \n";
+    cout << "Exit: exit \nAdd: add matrix 'name' 'row' 'col' You can even enter di";
+    cout << "rectly like this--> \n [a,b,c,...] (if matrix is square just enter ro";
+    cout << "w) \nDiagonal: is_diagonal 'name' \nUpper/Lower trangular: is_upper/l";
+    cout << "ower_trangular 'name' \nTrangular: is_trangular 'name' \nIdentity: is";
+    cout << "_identity 'name' \nNormal/Skew symmetric: is_normal/skew_symmetric 'n";
+    cout << "ame' \nSymmetric: is_symmetric 'name' \n Inverse: inverse 'name' or i";
+    cout << "nverse 'name' 'name of matrix 2' \nShow: show 'name' \nDelete: delete";
+    cout << " 'name' \nChange an element: change 'name' 'row' 'column' 'new elemen";
+    cout << "t \n";
     do
     {
         getline(cin, command, '\n');
@@ -23,19 +25,45 @@ int main()// line 253 and fix constructor
             break;
         if(command.size() >= 10 && command.substr(0, 10) == "add matrix")
         {
-            int pos_name = command.find(' ', 11);//find space after matrix name
-            string index = command.substr(pos_name + 1);
-            switch(index.size())
+            if(command.size() >= 12)
             {
-                case 1:
-                    user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
-                    break;
-                case 3:
-                    user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index), stoi(index.substr(2,3))));
-                    break;
-                default:
+                int pos_name = command.find(' ', 11);//find space after matrix name
+                string index = command.substr(pos_name + 1);
+                if(index.size() == 1)
+                {
+                        user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
+                        user_matris.back()->fill_from_user();
+                }
+                else if(index.size() == 3)
+                {
+                        user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index), stoi(index.substr(2,3))));
+                        user_matris.back()->fill_from_user();                    
+                }
+                else if(index.size() >= 2 && index.size() != command.size())
+                {
+                    int _row = stoi(index);
+                    int _col = _row;
+                    size_t i = 3;
+                    if(index[4] == '[')
+                    {
+                        _col = stoi(index.substr(2, 3));
+                        i = 5;
+                    }
+                    if(_row * _col * 2 == (index.substr(i)).size())
+                    {
+                        user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), _row, _col));
+                        for(size_t j = 1; j <= _row * _col; i+= 2, j++)
+                            user_matris.back()->fill_auto(stoi(index.substr(i , i+1)));
+                    }
+                    else
+                        cout << "add matrix: missing operand\n";   
+
+                }
+                else
                     cout << "add matrix: missing operand\n";
-            }
+            }       
+            else
+                cout << "add matrix: missing operand\n";
         }
         else if(command.size() >= 4 && command.substr(0, 4) == "show")
         {
@@ -59,7 +87,7 @@ int main()// line 253 and fix constructor
                 int k;
                 Matrix* mat = find_Matrix(user_matris ,command.substr(12), k);
                 if(mat != nullptr)
-                    cout << command.substr(12) << "IS " <<(mat->is_diagonal()? "" : "NOT " )<< "diagonal" << endl;
+                    cout << command.substr(12) << " IS " <<(mat->is_diagonal()? "" : "NOT " )<< "diagonal" << endl;
                 else
                     cout << "is_diagonal: cannot find '" << command.substr(12) << "': No such Matrix" << endl; 
             }
@@ -73,7 +101,7 @@ int main()// line 253 and fix constructor
                 int k;
                 Matrix* mat = find_Matrix(user_matris ,command.substr(20), k);
                 if(mat != nullptr)
-                    cout << command.substr(20) << "IS " <<(mat->is_lower_triangular()? "" : "NOT " )<< "lower triangular" << endl;
+                    cout << command.substr(20) << " IS " <<(mat->is_lower_triangular()? "" : "NOT " )<< "lower triangular" << endl;
                 else
                     cout << "is_diagonal: cannot find '" << command.substr(20) << "': No such Matrix" << endl; 
             }
@@ -87,7 +115,7 @@ int main()// line 253 and fix constructor
                 int k;
                 Matrix* mat = find_Matrix(user_matris ,command.substr(20), k);
                 if(mat != nullptr)
-                    cout << command.substr(20) << "IS " <<(mat->is_upper_triangular()? "" : "NOT " )<< "upper triangular" << endl;
+                    cout << command.substr(20) << " IS " <<(mat->is_upper_triangular()? "" : "NOT " )<< "upper triangular" << endl;
                 else
                     cout << "is_diagonal: cannot find '" << command.substr(20) << "': No such Matrix" << endl; 
             }
@@ -128,7 +156,7 @@ int main()// line 253 and fix constructor
                 int k;
                 Matrix* mat = find_Matrix(user_matris ,command.substr(12), k);
                 if(mat != nullptr)
-                    cout << command.substr(12) << "IS " <<(mat->is_identity()? "" : "NOT " )<< "identity" << endl;
+                    cout << command.substr(12) << " IS " <<(mat->is_identity()? "" : "NOT " )<< "identity" << endl;
                 else
                     cout << "is_identity: cannot find '" << command.substr(12) << "': No such Matrix" << endl; 
             }
@@ -156,7 +184,7 @@ int main()// line 253 and fix constructor
                 int k;
                 Matrix* mat = find_Matrix(user_matris ,command.substr(11), k);
                 if(mat != nullptr)
-                    cout << command.substr(20) << "IS " <<(mat->is_normal_symmetric()? "" : "NOT " )<< "normal symmetric" << endl;
+                    cout << command.substr(20) << " IS " <<(mat->is_normal_symmetric()? "" : "NOT " )<< "normal symmetric" << endl;
                 else
                     cout << "is_normal_symetric: cannot find '" << command.substr(20) << "': No such Matrix" << endl; 
             }
@@ -173,7 +201,7 @@ int main()// line 253 and fix constructor
                 {
                     bool N  = mat->is_normal_symmetric();
                     bool S = mat->is_skew_symmetric();
-                    cout << command.substr(13) << "IS ";
+                    cout << command.substr(13) << " IS ";
                     if(!(S || N))
                         cout << "NOT symmetric";
                     else
@@ -212,20 +240,25 @@ int main()// line 253 and fix constructor
             {
                 int k;
                 int pos_name = command.find(' ', 7);
-                Matrix* mat = find_Matrix(user_matris ,command.substr(7, pos_name-7), k);
-                if(mat != nullptr)
+                if(pos_name != -1)
                 {
-                    string index = command.substr(pos_name + 1);
-                    if(index.size() >= 5)
+                    Matrix* mat = find_Matrix(user_matris ,command.substr(7, pos_name-7), k);
+                    if(mat != nullptr)
                     {
-                        mat->change(stoi(index), stoi(index.substr(2,3)), stoi(index.substr(4)));
+                        string index = command.substr(pos_name + 1);
+                        if(index.size() >= 5)
+                        {
+                            mat->change(stoi(index), stoi(index.substr(2,3)), stoi(index.substr(4)));
+                        }
+                        else
+                            cout << "add matrix: missing operand\n";
+                        
                     }
                     else
-                        cout << "add matrix: missing operand\n";
-                    
+                        cout << "change: cannot find '" << command.substr(7, pos_name-7) << "': No such Matrix" << endl; 
                 }
                 else
-                    cout << "change: cannot find '" << command.substr(7) << "': No such Matrix" << endl; 
+                    cout << "change: missing operand\n";
 
             }
             else
@@ -239,9 +272,9 @@ int main()// line 253 and fix constructor
                 int k;
                 bool two = true;
                 int pos_name = command.find(' ', 8);
-                if(pos_name == command.size())
+                if(pos_name == -1)
                 {
-                    pos_name = command.find('\n', 8);
+                    pos_name = command.size();
                     two = false;
                 }
                 Matrix* mat = find_Matrix(user_matris ,command.substr(8, pos_name-8), k);
@@ -249,15 +282,14 @@ int main()// line 253 and fix constructor
                 {
                     if(two)
                     {
-                        int pos_name2 = command.find('\n', pos_name + 1);
-                        // Matrix* mat2 = (mat->inverse());    
+                        Matrix* mat2 = (mat->inverse(command.substr(pos_name + 1)));
+                        user_matris.push_back(mat2);    
                     }
                     else
-                        mat->inverse();
-                    
+                        mat->inverse(command.substr(8, pos_name-8));
                 }
                 else
-                    cout << "change: cannot find '" << command.substr(7) << "': No such Matrix" << endl; 
+                    cout << "inverse: cannot find '" << command.substr(8) << "': No such Matrix" << endl; 
 
             }
             else

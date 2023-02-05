@@ -17,6 +17,8 @@ class Matrix
 
     public:
     Matrix(string, int a, int = -1);
+    void fill_from_user();
+    void fill_auto(int);
     void show()const;
     void change(int, int, int);
     void destructor();
@@ -26,7 +28,7 @@ class Matrix
     bool is_identity()const;
     bool is_normal_symmetric()const;
     bool is_skew_symmetric()const;
-    Matrix* inverse(string = "");
+    Matrix* inverse(string);
 
 };
 

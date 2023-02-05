@@ -3,7 +3,7 @@
 Matrix::Matrix(string n, int parameter_row, int parameter_col):name(n) 
 {
     square = false;
-    if(parameter_col == -1)
+    if(parameter_col == -1 || parameter_col == parameter_row)
     {
         parameter_col = parameter_row;
         square = true;
@@ -14,13 +14,26 @@ Matrix::Matrix(string n, int parameter_row, int parameter_col):name(n)
     for(size_t i = 0 ; i<row ; i++)
     {
         matris[i] = new int[col];
+    }
+}
+void Matrix::fill_from_user()
+{
+    for(size_t i = 0 ; i < row; i++)
         for(size_t j = 0 ; j <col ;j++)
         {
             cout << "Enter element in (" << i << "," << j <<"): ";
             cin >> matris[i][j];
         }
-    }
+    string n;
     getline(cin, n,'\n');
+}
+void Matrix::fill_auto(int e)
+{
+    static int k = 0;
+    matris[k/col][k%col] = e;
+    k++;
+    if(k == row * col)
+        k = 0;
 }
 void Matrix::show()const
 {
@@ -115,7 +128,7 @@ Matrix* Matrix::inverse(string n)
 {
     if(!square)
         return nullptr;
-    if(n == "")
+    if(n == name)
     {
         for(size_t i = 1; i< row; i++)
             for(size_t j = 0 ; j < i; j++)
@@ -125,6 +138,17 @@ Matrix* Matrix::inverse(string n)
                 matris[i][j] -= matris[j][i];
             }
         return nullptr;
+    }
+    else
+    {
+        Matrix* m = new Matrix(n, row, col);
+        for(size_t i = 0 ; i < row; i++)
+            for(size_t j = 0 ; j <= i; j++)
+            {
+                m->matris[i][j] = matris[j][i];
+                m->matris[j][i] = matris[i][j];
+            }
+        return m;
     }
 }
 void Matrix::destructor()
