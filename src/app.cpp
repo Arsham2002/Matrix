@@ -23,7 +23,7 @@ bool App::run(string _command)
         is_skew_symmetric_command();
 
     else if(command.size() >= 13 && command.substr(0, 13) == "is_triangular")
-        is_lower_triangular_command();
+        is_triangular_command();
 
     else if(command.size() >= 12 && command.substr(0, 12) == "is_symmetric")
         is_symmetric_command();
@@ -72,10 +72,11 @@ void App::add_matrix_command()
         string index = command.substr(pos_name + 1);//row and column input
         if(find_Matrix(user_matris ,command.substr(11, pos_name - 11)) != -1)
         {
-            cout << "add: There is a matrix with this name\n";
+            cout << "add: There is a matrix with this name '" << command.substr(11, pos_name - 11) << "'\n";
             return;
         }
         if(index.find(' ', 0) == -1)
+        //A square matrix that has no predetermined values
         {
             if(!isdigit(index[0]))
             {
@@ -86,56 +87,80 @@ void App::add_matrix_command()
             user_matris.back()->fill_from_user();
         }
         else if(index[index.find(' ', 0) + 1] == '[')
+        //A square matrix that has predetermined values
         {
-            int i = index.find('[', 0) + 1;
-            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
-            int camma = index.find(',' , 0);
-            for(size_t j = 1, k = 0; j <= stoi(index) * stoi(index); j++, i = camma + 1)
+            int i = index.find('[', 0) + 1;//The index where the numbers start
+            if(!isdigit(index[i]))
             {
-                
-                if(camma == -1)
+                miss_operand = true;
+                return;
+            }
+            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
+            int comma = index.find('[' , 0);//before the first comma
+            for(size_t j = 1, previous_comma = comma; j <= stoi(index) * stoi(index); j++, i = comma + 1)
+            /*This loop rotates with the total number of members
+              until the matrix is ​​filled.
+              'previous_comma' Keeps the previous value of the comma
+              'i' Each time it changes to the index of the next number*/
+
+            {
+                if(comma == -1)
                 {
+                    //no comma is found
                     if(j == stoi(index) * stoi(index) && index.find(']', 0) != -1)
                     {
-                        camma = k;
+                    //The last member is left and the bracket is closed
+                        comma = previous_comma;
                         j--;
                         continue;
                     }
                     else
                     {
+                    /*The entry was entered incorrectly, for example,
+                      the bracket was not closed, or a smaller number
+                      of members was given, or a comma was omitted*/
                         miss_operand = true;
                         user_matris.back()->destructor();
                         delete user_matris.back();
                         break;
                     }
                 }
+                if(!isdigit(index[i]))
+                {
+                    miss_operand = true;
+                    user_matris.back()->destructor();
+                    delete user_matris.back();
+                    break;
+                }
                 user_matris.back()->fill_auto(stoi(index.substr(i)));
-                k = camma;
-                camma = index.find(',', camma + 1);
+                previous_comma = comma;
+                comma = index.find(',', comma + 1);
             }
 
         }
         else if(isdigit(index[index.find(' ', 0) + 1]) && index.find('[', 0) == -1)
+        //A rectangular matrix that has no predetermined values
         {
             user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index), stoi(index.substr(index.find(' ', 0) + 1))));
             user_matris.back()->fill_from_user();
         }
         else if(isdigit(index[index.find(' ', 0) + 1]) && index.find('[', 0) != -1)
+        //A rectangular matrix that has predetermined values
         {
             int i = index.find('[', 0) + 1;
             int row = stoi(index);
             int col = stoi(index.substr(index.find(' ', 0) + 1));
 
             user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), row , col));
-            int camma = index.find(',' , 0);
-            for(size_t j = 1, k = 0; j <= row * col; j++, i = camma + 1)
+            int comma = index.find('[' , 0);
+            for(size_t j = 1, previous_comma = 0; j <= row * col; j++, i = comma + 1)
             {
                 
-                if(camma == -1)
+                if(comma == -1)
                 {
                     if(j == row * col && index.find(']', 0) != -1)
                     {
-                        camma = k;
+                        comma = previous_comma;
                         j--;
                         continue;
                     }
@@ -147,9 +172,16 @@ void App::add_matrix_command()
                         break;
                     }
                 }
+                if(!isdigit(index[i]))
+                {
+                    miss_operand = true;
+                    user_matris.back()->destructor();
+                    delete user_matris.back();
+                    break;
+                }
                 user_matris.back()->fill_auto(stoi(index.substr(i)));
-                k = camma;
-                camma = index.find(',', camma + 1);
+                previous_comma = comma;
+                comma = index.find(',', comma + 1);
             }
         }
         else
@@ -215,7 +247,7 @@ void App::is_upper_triangular_command()
         miss_operand = true; 
 }
 
-void App::is_triangular()
+void App::is_triangular_command()
 {
     if(command.size() >= 14)
     {
@@ -293,7 +325,9 @@ void App::is_symmetric_command()
             bool N  = user_matris[k]->is_normal_symmetric();
             bool S = user_matris[k]->is_skew_symmetric();
             cout << command.substr(13) << " IS ";
-            if(!(S || N))
+            if(S && N)
+                cout << "Normal and Skew symmetric(In fact, matris is identity)";
+            else if(!(S || N))
                 cout << "NOT symmetric";
             else
             {

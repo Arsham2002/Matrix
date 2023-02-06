@@ -24,7 +24,7 @@ class App
         void is_diagonal_command();
         void is_lower_triangular_command();
         void is_upper_triangular_command();
-        void is_triangular();
+        void is_triangular_command();
         void is_identity_command();
         void is_skew_symmetric_command();
         void is_normal_symmetric_command();
