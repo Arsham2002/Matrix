@@ -64,46 +64,99 @@ void App::add_matrix_command()
     if(command.size() >= 12)//This command must have at least 12 characters
     {
         int pos_name = command.find(' ', 11);//The index of the first space after the text of the command
+        if(pos_name == -1)
+        {
+            miss_operand = true; 
+            return;
+        }
         string index = command.substr(pos_name + 1);//row and column input
-        if(index.size() == 1)//square matrix(user just enter one number)
+        if(find_Matrix(user_matris ,command.substr(11, pos_name - 11)) != -1)
         {
-                user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
-                user_matris.back()->fill_from_user();
+            cout << "add: There is a matrix with this name\n";
+            return;
         }
-        else if(index.size() == 3)
-        //Rectangle matrix(user enter two number for row and column)
+        if(index.find(' ', 0) == -1)
         {
-                user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index), stoi(index.substr(2,3))));
-                user_matris.back()->fill_from_user();                    
+            if(!isdigit(index[0]))
+            {
+                miss_operand = true;
+                return;
+            } 
+            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
+            user_matris.back()->fill_from_user();
         }
-        else if(index.size() >= 2 && index.size() != command.size())
-        //The user wants to create a matrix with default values
+        else if(index[index.find(' ', 0) + 1] == '[')
         {
-            int _row = stoi(index);
-            int _col = _row;
-            size_t i = 3;
-            if(index[4] == '[')
-            //If the matrix is ​​rectangular, the first bracket falls in this house
+            int i = index.find('[', 0) + 1;
+            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index)));
+            int camma = index.find(',' , 0);
+            for(size_t j = 1, k = 0; j <= stoi(index) * stoi(index); j++, i = camma + 1)
             {
-                _col = stoi(index.substr(2, 3));
-                i = 5;
+                
+                if(camma == -1)
+                {
+                    if(j == stoi(index) * stoi(index) && index.find(']', 0) != -1)
+                    {
+                        camma = k;
+                        j--;
+                        continue;
+                    }
+                    else
+                    {
+                        miss_operand = true;
+                        user_matris.back()->destructor();
+                        delete user_matris.back();
+                        break;
+                    }
+                }
+                user_matris.back()->fill_auto(stoi(index.substr(i)));
+                k = camma;
+                camma = index.find(',', camma + 1);
             }
-            if(_row * _col * 2 == (index.substr(i)).size())
-            //All the necessary values ​​have been entered
-            {
-                user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), _row, _col));
-                for(size_t j = 1; j <= _row * _col; i+= 2, j++)
-                    user_matris.back()->fill_auto(stoi(index.substr(i , i+1)));
-            }
-            else
-                miss_operand = true;  
 
         }
+        else if(isdigit(index[index.find(' ', 0) + 1]) && index.find('[', 0) == -1)
+        {
+            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), stoi(index), stoi(index.substr(index.find(' ', 0) + 1))));
+            user_matris.back()->fill_from_user();
+        }
+        else if(isdigit(index[index.find(' ', 0) + 1]) && index.find('[', 0) != -1)
+        {
+            int i = index.find('[', 0) + 1;
+            int row = stoi(index);
+            int col = stoi(index.substr(index.find(' ', 0) + 1));
+
+            user_matris.push_back(new Matrix(command.substr(11, pos_name - 11), row , col));
+            int camma = index.find(',' , 0);
+            for(size_t j = 1, k = 0; j <= row * col; j++, i = camma + 1)
+            {
+                
+                if(camma == -1)
+                {
+                    if(j == row * col && index.find(']', 0) != -1)
+                    {
+                        camma = k;
+                        j--;
+                        continue;
+                    }
+                    else
+                    {
+                        miss_operand = true;
+                        user_matris.back()->destructor();
+                        delete user_matris.back();
+                        break;
+                    }
+                }
+                user_matris.back()->fill_auto(stoi(index.substr(i)));
+                k = camma;
+                camma = index.find(',', camma + 1);
+            }
+        }
         else
-            miss_operand = true;  
+            miss_operand = true;
     }       
     else
-        miss_operand = true; 
+        miss_operand = true;
 }
 
 void App::show_command()
@@ -280,7 +333,7 @@ void App::change_command()
         int pos_name = command.find(' ', 7);
         if(pos_name != -1)
         {
-            int k = find_Matrix(user_matris ,command.substr(7));
+            int k = find_Matrix(user_matris ,command.substr(7, pos_name - 7));
             if(k != -1)
             {
                 string index = command.substr(pos_name + 1);
