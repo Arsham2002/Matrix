@@ -326,7 +326,7 @@ void App::is_symmetric_command()
             bool S = user_matris[k]->is_skew_symmetric();
             cout << command.substr(13) << " IS ";
             if(S && N)
-                cout << "Normal and Skew symmetric(In fact, matris is identity)";
+                cout << "Normal and Skew symmetric(In fact, matris is identity )";
             else if(!(S || N))
                 cout << "NOT symmetric";
             else

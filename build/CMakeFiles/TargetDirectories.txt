@@ -1,3 +1,0 @@
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/rebuild_cache.dir
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/edit_cache.dir
-/home/arsham/Desktop/Basu/Pishrafte/Porozhe/Matrix/build/CMakeFiles/Matrix.dir
